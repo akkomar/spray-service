@@ -3,6 +3,8 @@ package pl.akomar
 import akka.actor.{ActorRefFactory, Actor}
 import spray.routing.HttpService
 
+import scala.concurrent.Future
+
 class WebApiServiceActor extends Actor with WebApiService {
   def actorRefFactory: ActorRefFactory = context
 
@@ -15,11 +17,17 @@ trait WebApiService extends HttpService {
       pathEnd {
         get {
           complete {
-            s"pathPart1=$pathPart1" + "\n" +
-              s"pathPart2=$pathPart2" + "\n" +
-              s"pathPart3=$pathPart3"
+            longRunningOp(pathPart1, pathPart2, pathPart3)
           }
         }
       }
     }
+
+  def longRunningOp(a: String, b: String, c: String) = {
+    Thread.sleep(1000 * 60);
+
+    s"pathPart1=$a" + "\n" +
+      s"pathPart2=$b" + "\n" +
+      s"pathPart3=$c"
+  }
 }
