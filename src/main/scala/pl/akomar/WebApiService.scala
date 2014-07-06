@@ -4,7 +4,8 @@ import akka.actor.{ActorRefFactory, Actor}
 import grizzled.slf4j.Logger
 import spray.routing.HttpService
 
-import scala.concurrent.Future
+import scala.concurrent._
+import ExecutionContext.Implicits.global
 
 class WebApiServiceActor extends Actor with WebApiService {
   def actorRefFactory: ActorRefFactory = context
@@ -26,7 +27,7 @@ trait WebApiService extends HttpService {
       }
     }
 
-  def longRunningOp(a: String, b: String, c: String) = {
+  def longRunningOp(a: String, b: String, c: String): Future[String] = future {
     log.info("Starting long running operation...")
     Thread.sleep(1000 * 30);
     log.info("Long running operation finished, returning result.")
