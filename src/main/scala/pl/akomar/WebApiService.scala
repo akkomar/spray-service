@@ -11,15 +11,14 @@ class WebApiServiceActor extends Actor with WebApiService {
 
 trait WebApiService extends HttpService {
   val route =
-    path("") {
-      get {
-        complete {
-          <html>
-            <body>
-              <h1>Hello world!</h1>
-            </body>
-          </html>
-
+    pathPrefix("run" / Segment / Segment / Segment) { (pathPart1, pathPart2, pathPart3) =>
+      pathEnd {
+        get {
+          complete {
+            s"pathPart1=$pathPart1" + "\n" +
+              s"pathPart2=$pathPart2" + "\n" +
+              s"pathPart3=$pathPart3"
+          }
         }
       }
     }
