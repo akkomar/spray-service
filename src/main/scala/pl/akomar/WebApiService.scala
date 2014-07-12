@@ -1,11 +1,12 @@
 package pl.akomar
 
+import java.util.concurrent.Executors
+
 import akka.actor.{ActorRefFactory, Actor}
 import grizzled.slf4j.Logger
 import spray.routing.HttpService
 
 import scala.concurrent._
-import ExecutionContext.Implicits.global
 
 class WebApiServiceActor extends Actor with WebApiService {
   def actorRefFactory: ActorRefFactory = context
@@ -15,6 +16,8 @@ class WebApiServiceActor extends Actor with WebApiService {
 
 trait WebApiService extends HttpService {
   val log = Logger[this.type]
+
+  implicit val ec = ExecutionContext.fromExecutor(Executors.newCachedThreadPool())
 
   val route =
     pathPrefix("run" / Segment / Segment / Segment) { (pathPart1, pathPart2, pathPart3) =>
