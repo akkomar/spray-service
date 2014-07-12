@@ -23,19 +23,22 @@ trait WebApiService extends HttpService {
     pathPrefix("run" / Segment / Segment / Segment) { (pathPart1, pathPart2, pathPart3) =>
       pathEnd {
         get {
-          complete {
-            longRunningOp(pathPart1, pathPart2, pathPart3)
+          parameterMap { params: Map[String, String] =>
+            complete {
+              longRunningOp(pathPart1, pathPart2, pathPart3, params)
+            }
           }
         }
       }
     }
 
-  def longRunningOp(a: String, b: String, c: String): Future[String] = future {
+  def longRunningOp(a: String, b: String, c: String, params: Map[String, String]): Future[String] = future {
     log.info("Starting long running operation...")
     Thread.sleep(1000 * 30);
     log.info("Long running operation finished, returning result.")
     s"pathPart1=$a" + "\n" +
       s"pathPart2=$b" + "\n" +
-      s"pathPart3=$c"
+      s"pathPart3=$c" + "\n" +
+    s"parameters: " + params.mkString(", ")
   }
 }
