@@ -6,6 +6,8 @@ version := "1.0"
 
 scalaVersion  := "2.10.3"
 
+scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
+
 libraryDependencies ++= {
   val akkaV = "2.1.4"
   val sprayV = "1.1.1"
